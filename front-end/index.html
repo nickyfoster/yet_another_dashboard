@@ -1,0 +1,35 @@
+<html>
+<header>
+    <title>Yet another Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</header>
+
+<body>
+<header>
+    My new Dashboard
+</header>
+<main>
+    <article>
+        <h1>Weather</h1>
+        <div>This is simple test to get data from a backend</div>
+        <div>
+            <label for="data-input">Data to send:</label>
+            <input type="text" id="data-input">
+            <button onclick="sendData()">Send data</button>
+    </article>
+    <aside>
+        <h2>Economic Calendar</h2>
+        <div>
+            <button onclick="getUsers()">Get user data</button>
+            <hr>
+            <div id="sent-data-container"></div>
+            <div id="result-container"></div>
+        </div>
+    </aside>
+</main>
+<footer>
+
+</footer>
+</body>
+<script src="script.js"></script>
+</html>
