@@ -40,7 +40,6 @@ class ECParser:
     def _get_calendar_column_names(self, events: bs4.element.ResultSet) -> None:
         """
         Function for parsing and adding weekdays to final data structure
-
         :param events:
         :return:
         """
@@ -63,11 +62,12 @@ class ECParser:
                 event_time = unidecode.unidecode(econ_event.text.replace(event_name, '')).strip()
                 self.calendar_data[cnt]["events"].append({"event_name": event_name,
                                                           "event_time": event_time,
-                                                          "event_impact": self._event_impact_conventor(
+                                                          "event_impact": self._event_impact_convertor(
                                                               econ_event.get("class"))})
             cnt += 1
 
-    def _event_impact_conventor(self, event_type: list) -> int:
+    @staticmethod
+    def _event_impact_convertor(event_type: list) -> int:
         if "star" in event_type:
             return 1
         elif "djstar" in event_type:
