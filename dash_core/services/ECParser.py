@@ -11,6 +11,7 @@ class ECParser:
     """
     Econ Calendar parsing logic.
     """
+
     def __init__(self, url=None):
         self.url = url if url else "https://ibd.econoday.com/byweek.asp?cust=ibd&cty=US&lid=0"
         self.calendar_data = dict()
@@ -28,6 +29,7 @@ class ECParser:
         if len(events) == 1:
             self._get_calendar_column_names(events)
             self._parse_calendar_column_data(events)
+            return self.calendar_data
         else:
             raise CustomException(code=ExceptionCode.INTERNAL_SERVER_ERROR,
                                   message=ExceptionMessage.DASHCORE_URL_UNABLE_TO_PARSE_HTML)
@@ -41,8 +43,13 @@ class ECParser:
                                   message=ExceptionMessage.DASHCORE_URL_UNABLE_TO_PARSE_WEEK)
 
     def _parse_calendar_column_data(self, events: bs4.element.ResultSet):
-        table_data_events = events
-        print(events)
+        econ_days = events[0].find_all_next("td", {"class": "events"})
+        for econ_day in econ_days:
+            econ_events = econ_day.find_all("div", {
+                "class": ["econoevents star", "econoevents djstar", "econoevents", "econoevents bullet"]})
+            for econ_event in econ_events:
+                print(econ_event.text)
+            break
 
     @staticmethod
     def get_html_text(url):
