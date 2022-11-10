@@ -89,4 +89,4 @@ class ECParser:
 
 parser = ECParser()
 parser.get_econ_calendar()
-pprint(parser.calendar_data[3])
+pprint(parser.calendar_data)
