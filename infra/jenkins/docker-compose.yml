@@ -1,0 +1,12 @@
+version: "2.4"
+services:
+  jenkins:
+    image: jenkins/jenkins
+    restart: always
+    volumes:
+      - type: bind
+        source: /opt/jenkins
+        target: /var/jenkins_home
+    ports:
+      - 127.0.0.1:5069:8080
+      - 50000:50000

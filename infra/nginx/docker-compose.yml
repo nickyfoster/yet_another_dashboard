@@ -1,0 +1,10 @@
+version: "2.4"
+services:
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - type: bind
+        source: /opt/nginx
+        target: /etc/nginx/conf.d
+    network_mode: host
