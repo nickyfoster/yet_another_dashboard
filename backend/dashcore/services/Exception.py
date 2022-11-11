@@ -1,5 +1,5 @@
-from dash_core.services.ExceptionMessage import ExceptionMessage
-from dash_core.services.ExceptionCode import ExceptionCode
+from dashcore.services.ExceptionMessage import ExceptionMessage
+from dashcore.services.ExceptionCode import ExceptionCode
 
 
 class CustomException(Exception):

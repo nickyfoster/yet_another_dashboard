@@ -22,12 +22,12 @@ class PostInstallCommand(install):
 
 
 setup(
-    name='dash_core',
+    name='dashcore',
     url='https://github.com/nickyfoster/yet_another_dashboard',
     description='Yet Another Dashboard Backend Service',
     keywords='python dashboard backend',
     packages=find_packages(exclude=['test', 'test.*']),
-    package_dir={'dash_core': 'dash_core'},
+    package_dir={'dashcore': 'dashcore'},
     install_requires=[
         "aniso8601==9.0.1",
         "beautifulsoup4==4.11.1",
@@ -44,6 +44,7 @@ setup(
         "itsdangerous==2.1.2",
         "Jinja2==3.1.2",
         "MarkupSafe==2.1.1",
+        "redis==4.3.4",
         "requests==2.28.1",
         "six==1.16.0",
         "soupsieve==2.3.2.post1",
