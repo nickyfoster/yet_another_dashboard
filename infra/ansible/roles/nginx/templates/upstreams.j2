@@ -1,0 +1,16 @@
+{{ ansible_managed | comment }}
+{% for upstream in nginx_upstreams %}
+{% if upstream.filename | default('upstreams.conf') == template_destpath | basename %}
+upstream {{ upstream.name }} {
+{% if upstream.parameters is defined %}
+{% for parameter in upstream.parameters %}
+    {{ parameter }};
+{% endfor %}
+
+{% endif %}
+{% for server in upstream.servers %}
+    server {{ server }};
+{% endfor %}
+}
+{% endif %}
+{% endfor %}

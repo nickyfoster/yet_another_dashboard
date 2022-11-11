@@ -1,0 +1,20 @@
+---
+- name: restart nginx step 1 (verify)
+  listen: "restart nginx"
+  command: nginx -t -c /etc/nginx/nginx.conf
+
+- name: reload nginx step 1 (verify)
+  listen: "reload nginx"
+  command: nginx -t -c /etc/nginx/nginx.conf
+
+- name: restart nginx step 2
+  listen: "restart nginx"
+  service:
+    name: nginx
+    state: restarted
+
+- name: reload nginx step 2
+  listen: "reload nginx"
+  service:
+    name: nginx
+    state: reloaded

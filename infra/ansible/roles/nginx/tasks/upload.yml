@@ -1,0 +1,52 @@
+---
+- name: "Ensure nginx html directory exists"
+  file:
+    path: "{{ nginx_html_upload_dest }}"
+    state: directory
+  when: nginx_html_upload_enable | bool
+
+- name: "Upload nginx html files"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_html_upload_dest }}"
+    backup: yes
+  loop: "{{ nginx_html_upload_src }}"
+  when: nginx_html_upload_enable | bool
+  notify:
+    - reload nginx
+
+- name: "Ensure ssl certificate directory exists"
+  file:
+    path: "{{ nginx_ssl_crt_upload_dest }}"
+    state: directory
+  when: nginx_ssl_upload_enable | bool
+
+- name: "Ensure ssl key directory exists"
+  file:
+    path: "{{ nginx_ssl_key_upload_dest }}"
+    state: directory
+  when: nginx_ssl_upload_enable | bool
+
+- name: "Upload nginx ssl certificates"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_ssl_crt_upload_dest }}"
+    mode: 0640
+    decrypt: yes
+    backup: yes
+  loop: "{{ nginx_ssl_crt_upload_src }}"
+  when: nginx_ssl_upload_enable | bool
+  notify:
+    - reload nginx
+
+- name: "Upload nginx ssl keys"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_ssl_key_upload_dest }}"
+    mode: 0640
+    decrypt: yes
+    backup: yes
+  loop: "{{ nginx_ssl_key_upload_src }}"
+  when: nginx_ssl_upload_enable | bool
+  notify:
+    - reload nginx

@@ -1,0 +1,31 @@
+- name: Set path for local rendering
+  set_fact:
+    local_render_path: "{{ playbook_dir }}/!render/{{ inventory_hostname }}/{{ role_name }}/conf.d"
+
+- name: Create directory for local rendering
+  become: false
+  file:
+    state: directory
+    path: "{{ local_render_path }}"
+  delegate_to: localhost
+
+- name: Add managed upstream config files.
+  become: false
+  template:
+    src: "{{ item.template|default(nginx_upstream_template) }}"
+    dest: "{{ local_render_path }}/{{ item }}"
+    force: true
+    mode: 0644
+  with_items: "{{ nginx_upstreams | map(attribute='filename', default='upstreams.conf') | unique | list }}"
+  delegate_to: localhost
+
+- name: Add managed vhost config files.
+  become: false
+  template:
+    src: "{{ item.template|default(nginx_vhost_template) }}"
+    dest: "{{ local_render_path }}/{{ item.filename|default(item.server_name.split(' ')[0] ~ '.conf') }}"
+    force: true
+    mode: 0644
+  when: item.state|default('present') != 'absent'
+  with_items: "{{ nginx_vhosts }}"
+  delegate_to: localhost

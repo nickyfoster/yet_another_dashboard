@@ -1,0 +1,77 @@
+{{ ansible_managed | comment }}
+{% block server_redirect %}
+{% if item.server_name_redirect is defined %}
+server {
+    listen       {{ item.listen | default('80') }};
+    server_name  {{ item.server_name_redirect }};
+    return       301 $scheme://$host$request_uri;
+}
+{% endif %}
+{% endblock %}
+
+server {
+    {% block server_begin %}{% endblock %}
+
+    {% block server_basic -%}
+    listen {{ item.listen | default('80') }};
+
+{% if item.server_name is defined %}
+    server_name {{ item.server_name }};
+{% endif %}
+
+{% if item.root is defined %}
+    root {{ item.root }};
+{% endif %}
+{% if item.index is defined %}
+    index {{ item.index }};
+{% endif %}
+{% if item.error_page is defined %}
+    error_page {{ item.error_page }};
+{% endif %}
+{% if item.access_log is defined %}
+    access_log {{ item.access_log }};
+{% endif %}
+{% if item.error_log is defined %}
+    error_log {{ item.error_log }} error;
+{% endif %}
+
+{% if item.ssl is defined %}
+    ssl_certificate     {{ item.ssl.cert }};
+    ssl_certificate_key {{ item.ssl.key }};
+{% for parameters in item.ssl.extra_parameters | default([]) %}
+    {{ parameters }};
+{% endfor %}
+
+{% endif %}
+{% if item.return is defined -%}
+    return {{ item.return }};
+
+{% endif %}
+{% endblock %}
+{% block server_end %}{% endblock %}
+{% if item.extra_parameters is defined %}
+{% for extra_parameter in item.extra_parameters %}
+    {{ extra_parameter }};
+{% endfor %}
+{% endif %}
+
+{% if item.conditions is defined %}
+{% for item in item.conditions %}
+    if ({{ item.condition }}) {
+{% for parameters in item.parameters %}
+        {{ parameters }};
+{% endfor %}
+    }
+{% endfor %}
+{% endif %}
+
+{% if item.locations is defined %}
+{% for location in item.locations %}
+    location {{ location.location }} {
+{% for parameters in location.parameters %}
+        {{ parameters }};
+{% endfor %}
+    }
+{% endfor %}
+{% endif %}
+}
