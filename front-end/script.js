@@ -1,5 +1,6 @@
 var xhr = null;
 var engpoint_url = "http://localhost:5000/users"
+
 getXmlHttpRequestObject = function () {
     if (!xhr) {
         // Create a new XMLHttpRequest object
