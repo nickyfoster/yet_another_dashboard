@@ -7,3 +7,4 @@ db:
 ECParser:
   url: https://ibd.econoday.com/byweek.asp?cust=ibd&cty=US&lid=0
   cache_enabled: yes
+  update_period_seconds: 3600

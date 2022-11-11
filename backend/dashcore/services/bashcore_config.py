@@ -33,6 +33,7 @@ class DBConfig:
 class ECParserConfig:
     cache_enabled: bool
     url: str
+    update_period_seconds: int
 
 
 @nested_dataclass

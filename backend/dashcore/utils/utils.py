@@ -7,14 +7,16 @@ from pathlib import Path
 import requests
 import yaml
 
-from bashcore_config import Config
+from dashcore.DBConnectors.RedisConnector import RedisConnector
 from dashcore.services.Exception import CustomException
 from dashcore.services.ExceptionCode import ExceptionCode
 from dashcore.services.ExceptionMessage import ExceptionMessage
+from dashcore.services.bashcore_config import Config
 
 
 def date_converter(date: str):
-    return datetime.strptime(date, '%A %b %d')
+    date = date + " " + str(datetime.today().year)
+    return datetime.strptime(date, '%A %b %d %Y').date().isoformat()
 
 
 def event_impact_convertor(event_type: list) -> int:
@@ -67,3 +69,7 @@ def get_config() -> Config:
     config = Config(**res_config)
 
     return config
+
+
+def get_db_connector(db_config=get_config().db):
+    return RedisConnector(db_config)
