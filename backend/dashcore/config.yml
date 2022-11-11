@@ -1,5 +1,5 @@
 db:
   host: localhost
   port: 6379
-  username: 1
-  password: 1
+  username:
+  password:

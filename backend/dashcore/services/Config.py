@@ -1,20 +1,6 @@
-from dataclasses import dataclass, is_dataclass
-
-import inspect
 from dataclasses import dataclass
+from dataclasses import is_dataclass
 
-
-# @dataclass()
-# class Payload:
-#     def __init__(self, **kwargs):
-#         pass
-#
-#     @classmethod
-#     def from_dict(cls, d):
-#         return cls(**{
-#             k: v for k, v in d.items()
-#             if k in inspect.signature(cls).parameters
-#         })
 
 def nested_dataclass(*args, **kwargs):
     def wrapper(cls):

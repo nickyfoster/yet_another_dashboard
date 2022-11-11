@@ -6,7 +6,7 @@ import unidecode
 from dashcore.services.Exception import CustomException
 from dashcore.services.ExceptionCode import ExceptionCode
 from dashcore.services.ExceptionMessage import ExceptionMessage
-from utils import event_impact_convertor, get_html_text, date_converter
+from dashcore.utils.utils import event_impact_convertor, get_html_text, date_converter
 
 
 class ECParser:
