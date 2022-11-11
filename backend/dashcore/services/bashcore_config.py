@@ -21,14 +21,21 @@ def nested_dataclass(*args, **kwargs):
     return wrapper(args[0]) if args else wrapper
 
 
-@nested_dataclass
+@dataclass
 class DBConfig:
     host: str
-    port: str
-    username: str
+    port: int
+    db: int
     password: str
+
+
+@dataclass
+class ECParserConfig:
+    cache_enabled: bool
+    url: str
 
 
 @nested_dataclass
 class Config:
     db: DBConfig
+    ECParser: ECParserConfig

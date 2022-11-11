@@ -1,12 +1,54 @@
+from functools import partial
+from typing import Union, Callable
+
 from redis import Redis
+from redis.exceptions import ConnectionError, ResponseError
+
+from dashcore.DBConnectors.AbstractDBConnector import AbstractDBConnector
+from dashcore.services.bashcore_config import DBConfig
+from dashcore.services.Exception import CustomException
+from dashcore.services.ExceptionCode import ExceptionCode
+from dashcore.services.ExceptionMessage import ExceptionMessage
 
 
-class RedisConnector:
-    def __init__(self):
-        self.config = get_config()
-        self.redis = Redis
+class RedisConnector(AbstractDBConnector):
 
+    def __init__(self, config: DBConfig):
+        self.config = config
+        self.redis = self.init_redis()
 
-    def init_connection(self):
-        pass
+    def init_redis(self):
+        try:
+            return Redis(host=self.config.host,
+                         port=self.config.port,
+                         db=self.config.db,
+                         password=self.config.password)
 
+        except Exception as e:
+            print(e)
+
+    def get_redis(self):
+        return self.redis
+
+    def set_redis(self):
+        self.redis.close()
+        self.redis = self.init_redis()
+
+    def call(self, fnc: Callable):
+        try:
+            return fnc()
+        except ResponseError:
+            raise CustomException(code=ExceptionCode.INTERNAL_SERVER_ERROR,
+                                  message=ExceptionMessage.DASHCORE_DB_REDIS_WRONG_PASS)
+        except ConnectionError:
+            raise CustomException(code=ExceptionCode.INTERNAL_SERVER_ERROR,
+                                  message=ExceptionMessage.DASHCORE_DB_REDIS_UNABLE_TO_CONNECT)
+
+    def close(self) -> None:
+        self.call(self.get_redis().close)
+
+    def set(self, key: str, data: Union) -> None:
+        self.call(partial(self.get_redis().set, key, data))
+
+    def get(self, key: str) -> str:
+        return self.call(partial(self.get_redis().get, key))

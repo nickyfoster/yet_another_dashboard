@@ -7,7 +7,7 @@ from pathlib import Path
 import requests
 import yaml
 
-from Config import Config
+from bashcore_config import Config
 from dashcore.services.Exception import CustomException
 from dashcore.services.ExceptionCode import ExceptionCode
 from dashcore.services.ExceptionMessage import ExceptionMessage
@@ -60,7 +60,6 @@ def update_nested_dict(d, u):
 
 def get_config() -> Config:
     source_config = load_yml(Path(__file__).parent / '..' / 'config.yml')
-    print(source_config)
     local_source_config = load_yml(Path(__file__).parent / '..' / 'config-local.yml')
     _res_config = update_nested_dict(source_config, local_source_config)
     etc_config = load_yml('/etc/dashcore/config.yml')

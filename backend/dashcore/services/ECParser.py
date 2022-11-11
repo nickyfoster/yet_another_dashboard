@@ -1,11 +1,10 @@
-from pprint import pprint
-
 import bs4
 import unidecode
 
 from dashcore.services.Exception import CustomException
 from dashcore.services.ExceptionCode import ExceptionCode
 from dashcore.services.ExceptionMessage import ExceptionMessage
+from dashcore.services.bashcore_config import ECParserConfig
 from dashcore.utils.utils import event_impact_convertor, get_html_text, date_converter
 
 
@@ -14,8 +13,9 @@ class ECParser:
     Econ Calendar parsing logic.
     """
 
-    def __init__(self, url=None):
-        self.url = url if url else "https://ibd.econoday.com/byweek.asp?cust=ibd&cty=US&lid=0"
+    def __init__(self, config: ECParserConfig):
+        self.config = config
+        self.url = self.config.url
         self.calendar_data = dict()
         self.event_classes_list = ["econoevents star", "econoevents djstar", "econoevents", "econoevents bullet"]
         self.table_day_classes = ["navwkday", "currentnavwkday"]
@@ -25,8 +25,8 @@ class ECParser:
 
     def get_econ_calendar(self) -> dict:
         """Economic Calendar parser. We get main table from HTML source and split into two parts:
-        1. Days. Here we get weekdays and their numbers.
-        2. Events. Here we get economic events with time and description.
+        1. Days. Weekdays and their numbers.
+        2. Events. Economic events with time and description.
         :return: dict, calendar_data
         """
         events = self.soup.find_all("table", {"class": "eventstable"})
@@ -69,6 +69,5 @@ class ECParser:
             cnt += 1
 
 
-parser = ECParser()
-parser.get_econ_calendar()
-pprint(parser.calendar_data)
+econ_calendar = ECParser().get_econ_calendar()
+print(econ_calendar)
